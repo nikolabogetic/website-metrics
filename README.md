@@ -14,7 +14,7 @@ Installing in virtualenv:
 ```
 $ python3 -m venv venv
 $ . venv/bin/activate
-$ pip install requirements.txt
+$ pip install -r requirements.txt
 $ python3 init_config.py
 ```
 Running the `init_config.py` script will interactively prompt you for Kafka and Postgres connection information, as well as instruct you where to place the certificate files.
