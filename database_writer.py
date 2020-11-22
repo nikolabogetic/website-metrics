@@ -20,7 +20,7 @@ def create_metrics_table(connection):
                     timestamp timestamp default current_timestamp,
                     url varchar not null,
                     response_time real not null,
-                    response_code int not null,
+                    status_code int not null,
                     regex_found bool
                 );        
                 """
@@ -38,7 +38,7 @@ def insert_data(connection, data):
         with connection.cursor() as curs:
             curs.execute(
                 """
-                INSERT INTO website_metrics (url, response_time, response_code, regex_found)
+                INSERT INTO website_metrics (url, response_time, status_code, regex_found)
                 VALUES (%s, %s, %s, %s);
                 """,
                 (data.get('url'), data.get('response_time'), data.get('status_code'), data.get('regex_found'))
