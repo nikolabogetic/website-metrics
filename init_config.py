@@ -17,7 +17,7 @@ print("\nGreat! Now, on to Kafka:\n")
 servers = input("Kafka server(s) with port(s): ")
 topic = input("Kafka topic (e.g. website-metrics): ")
 
-config['POSTGRES'] = {'username': username,
+config['POSTGRES'] = {'user': username,
                     'password': password,
                     'host': host,
                     'port': port,
@@ -31,7 +31,7 @@ with open('config/config.ini', 'w') as configfile:
 
 print(
     "\nExcellent! Finally, please download your Kafka certificate files \n" +
-    "and place them in <application_folder>/config/certs/\n" +
+    "and place them in website-metrics/config/certs/\n" +
     "\nThe following files are needed: ca.pem, service.cert, service.key\n"
 )
 
