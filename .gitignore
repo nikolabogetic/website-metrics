@@ -3,6 +3,7 @@ config/config.ini
 config/certs/*.key
 config/certs/*.pem
 config/certs/*.cert
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
