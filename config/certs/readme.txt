@@ -1,0 +1,1 @@
+Please place your Kafka certificates and key in this folder

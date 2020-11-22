@@ -1,3 +1,9 @@
+# Custom
+config/config.ini
+config/certs/*.key
+config/certs/*.pem
+config/certs/*.cert
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
