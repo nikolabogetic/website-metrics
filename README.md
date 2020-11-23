@@ -40,7 +40,7 @@ $ python3 website_checker.py -t 5 --url https://www.example.org/
 
 ### database_writer:
 ```
-$ python3 database_writer.py 
+$ python3 database_writer.py
 ```
 
 

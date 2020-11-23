@@ -1,49 +1,29 @@
-import requests
 import json
-import re
 import argparse
 import logging
 from kafka import errors
 from kafka.admin import NewTopic
 
 from config import kafka_conf
+from utils.web import collect_metrics
 from utils.timer import RepeatedTimer
 from utils.kafka import init_admin, init_producer
 
-logger = logging.getLogger(__name__)
 
-def collect_metrics(website, pattern=None, publish=True, topic=None):
-    """Retrieve metrics (status code, response time) from a given website. 
-    Optionally, search for a regex pattern. Then publish to a Kafka topic.
+def collect_and_publish(website, topic, pattern=None):
+    data = collect_metrics(website, pattern)
+    logger.info(data)
+    producer.send(topic, value=data)
 
-    Arguments:
-        website (str): URL of website to collect metrics from
-        pattern (str, optional): Regex pattern to look for
-        publish (bool, optional): Publish to a Kafka topic, default true
-        topic (str, optional): Name of the Kafka topic
-    Returns:
-        data (dict): Key-value object with desired metrics
-    """
-    r = requests.get(website)
-
-    match = None    
-    # Try searching for regex pattern if provided
-    if pattern and r.status_code == 200:
-        match = True if re.search(pattern, r.text) else False
-
-    data = {
-        'url': website,
-        'status_code': r.status_code,
-        'response_time': r.elapsed.total_seconds(),
-        'regex_found': match
-    }
-    logger.debug(data)
-
-    if publish and topic:
-        producer.send(topic, value=data)
-    return data
 
 if __name__ == '__main__':
+    # Configure logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.INFO)
+    logger.addHandler(ch)
+
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Metrics collector')
     parser.add_argument('-t', '--time', help='Time interval in seconds', required=True)
@@ -65,5 +45,5 @@ if __name__ == '__main__':
     except errors.TopicAlreadyExistsError:
         logger.info('Topic already exists, skipping')
     # Start periodic collection of metrics
-    rt = RepeatedTimer(int(args.time), collect_metrics, args.url, pattern=args.pattern, topic=topic)
+    rt = RepeatedTimer(int(args.time), collect_and_publish, args.url, topic, pattern=args.pattern)
     rt.start()

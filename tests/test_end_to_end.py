@@ -3,26 +3,25 @@ from kafka.admin import NewTopic
 from kafka import errors
 from config import kafka_conf, postgres_conf
 from utils.kafka import init_admin, init_producer, init_consumer
-from website_checker import collect_metrics
 
 def test_send_receive_message():
     data = [
         {
             'url': 'https://www.wikipedia.org/',
-            'status_code': 200,
             'response_time': 0.1234,
+            'status_code': 200,
             'regex_found': True
         },
         {
             'url': 'https://www.stackoverflow.com/',
-            'status_code': 500,
             'response_time': 0.1784,
+            'status_code': 500,
             'regex_found': False
         },
         {
             'url': 'https://www.example.org/',
-            'status_code': 404,
             'response_time': 0.10973,
+            'status_code': 404,
             'regex_found': None
         },
     ]
