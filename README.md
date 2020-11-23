@@ -1,5 +1,7 @@
 # website-metrics
 
+![Python application](https://github.com/nikolabogetic/website-metrics/workflows/Python%20application/badge.svg)
+
 This repository contains the following utilities:
 
 `website_checker` is used to collect metrics from a given website and send them to a Kafka broker. 
