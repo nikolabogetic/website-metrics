@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  database_writer:
+    build: .
+    command: python database_writer.py
+    volumes:
+      - ./certs:/usr/src/app/certs
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - KAFKA_URI=${KAFKA_URI}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+    networks: 
+      - website_metrics
+    restart: always
+
+  website_checker:
+    build: .
+    environment:
+      - KAFKA_URI=${KAFKA_URI}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - WEBSITE_URL=${WEBSITE_URL}
+      - TIME_INTERVAL=${TIME_INTERVAL}
+      - REGEX_PATTERN=${REGEX_PATTERN}
+    links:
+      - database_writer
+    depends_on: 
+      - database_writer
+    networks: 
+      - website_metrics
+    restart: always
+    
+
+networks:
+  website_metrics:
+    driver: bridge

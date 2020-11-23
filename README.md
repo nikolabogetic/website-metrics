@@ -2,51 +2,47 @@
 
 This repository contains the following utilities:
 
-`website_checker.py` is used to collect metrics from a given website and send them to a Kafka broker. 
+`website_checker` is used to collect metrics from a given website and send them to a Kafka broker. 
 
-`database_writer.py` is used to receive messages from a Kafka broker and write them to a Postgres database.
+`database_writer` is used to receive messages from a Kafka broker and write them to a Postgres database.
 
 Requires Python 3.6 or newer.
 
 ## Setup
 
-Installing in virtualenv:
+Initial setup:
 ```
-$ python3 -m venv venv
-$ . venv/bin/activate
-$ pip install -r requirements.txt
 $ python3 init_config.py
 ```
-Running the `init_config.py` script will interactively prompt you for Kafka and Postgres connection information, as well as instruct you where to place the certificate files.
+The `init_config.py` script helps create a `.env` configuration file. It will interactively prompt you for connection parameters, as well as instruct you to place the Kafka certificate files in `certs/`.
 
+Example `.env` file:
+```
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=mysecretpassword
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=postgres
+
+KAFKA_URI=localhost:9092
+KAFKA_TOPIC=website-metrics
+
+WEBSITE_URL=https://example.org/
+TIME_INTERVAL=3
+REGEX_PATTERN="Domain"
+```
 
 ## Usage
 
-### website_checker:
+### Running with Docker:
+Once `.env` is configured and the certificate files are in place, you can run the whole package with docker-compose:
 ```
-$ python3 website_checker.py -t <time_interval> --url <website_to_scrape> \
-    [--pattern <regex_patern>]
+$ docker-compose build
+$ docker-compose up
 ```
+This will run both utilities in separate containers.
 
-Here's an example that will make requests to Wikipedia every 5 seconds and look for the word "English":
-
+You can always set the parameters directly in `docker-compose.yml` if you prefer, or override them on the command line, like so:
 ```
-$ python3 website_checker.py -t 5 --url https://www.wikipedia.org/ --pattern "English"
-```
-Another example without Regex:
-```
-$ python3 website_checker.py -t 5 --url https://www.example.org/
-```
-
-### database_writer:
-```
-$ python3 database_writer.py
-```
-
-
-## Testing
-For tests, it is assumed that Kafka certificates, as well as Kafka and Postgres connection parameters, are configured using `init_config.py`.
-
-```
-$ pytest -v --cov
+$ WEBSITE_URL=https://wikipedia.org/ REGEX_PATTERN="English" docker-compose up
 ```

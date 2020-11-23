@@ -19,6 +19,12 @@ print("\nGreat! Now, on to Kafka:\n")
 uri = input("Kafka URI (server:port): ")
 topic = input("Kafka topic (e.g. website-metrics): ")
 
+print("\nNow let's configure website checker parameters:\n")
+
+website = input("URL of website to check: ")
+interval = input("Time interval in seconds: ")
+pattern = input("Regex pattern to look for (optional): ")
+
 with open(dotenv_path, 'w') as f:
     f.write('POSTGRES_USER=' + username + '\n')
     f.write('POSTGRES_PASSWORD=' + password + '\n')
@@ -28,10 +34,14 @@ with open(dotenv_path, 'w') as f:
     f.write('\n')
     f.write('KAFKA_URI=' + uri + '\n')
     f.write('KAFKA_TOPIC=' + topic + '\n')
+    f.write('\n')
+    f.write('WEBSITE_URL=' + website + '\n')
+    f.write('TIME_INTERVAL=' + interval + '\n')
+    f.write('REGEX_PATTERN=' + pattern + '\n')
 
 print(
     "\nExcellent! Finally, please download your Kafka certificate files \n" +
-    "and place them in website-metrics/config/certs/\n" +
+    "and place them in website-metrics/certs/\n" +
     "\nThe following files are needed: ca.pem, service.cert, service.key\n"
 )
 

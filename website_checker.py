@@ -1,5 +1,4 @@
 import json
-import argparse
 import logging
 import sys
 from kafka import errors
@@ -31,13 +30,6 @@ if __name__ == '__main__':
     ch.setLevel(logging.INFO)
     logger.addHandler(ch)
 
-    # Parse command line arguments
-    parser = argparse.ArgumentParser(description='Metrics collector')
-    parser.add_argument('-t', '--time', help='Time interval in seconds', required=True)
-    parser.add_argument('--url', help='URL of website to scrape', required=True)
-    parser.add_argument('--pattern', help='Regex pattern to look for', required=False)
-    args = parser.parse_args()
-
     logger.info('Website checker started')
 
     # Create Kafka admin and producer, get topic name from config
@@ -49,18 +41,16 @@ if __name__ == '__main__':
         logger.error(e)
         sys.exit(1)
 
-    topic = conf.kafka_topic
-
     # Create new topic
     topic_list = []
-    topic_list.append(NewTopic(name=topic, num_partitions=1, replication_factor=3))
+    topic_list.append(NewTopic(name=conf.kafka_topic, num_partitions=1, replication_factor=3))
     try:
         logger.info('Creating topic')
         admin_client.create_topics(new_topics=topic_list, validate_only=False)
     except errors.TopicAlreadyExistsError:
         logger.info('Topic already exists, skipping')
     # Start periodic collection of metrics
-    rt = RepeatedTimer(int(args.time), collect_and_publish, args.url, topic, pattern=args.pattern)
+    rt = RepeatedTimer(int(conf.interval), collect_and_publish, conf.website, conf.kafka_topic, pattern=conf.pattern)
     try:
         rt.start()
         while True:
