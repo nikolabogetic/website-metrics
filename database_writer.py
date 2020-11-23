@@ -2,49 +2,8 @@ import psycopg2
 import json
 
 from config import kafka_conf, postgres_conf
-from utils import init_postgres
-from kafka_utils import init_consumer
-
-def create_metrics_table(connection):
-    """Create table to store metrics in Postgres. 
-    Adds automatic timestamp on insert (UTC time). 
-
-    Arguments:
-        connection (obj): Postgres connection object returned by psycopg2.connect
-    """
-    with connection:
-        with connection.cursor() as curs:
-            curs.execute(
-                """
-                CREATE TABLE IF NOT EXISTS website_metrics (
-                    timestamp timestamp default current_timestamp,
-                    url varchar not null,
-                    response_time real not null,
-                    status_code int not null,
-                    regex_found bool
-                );        
-                """
-            )
-    return
-
-def insert_data(connection, data):
-    """Insert collected metrics data into Postgres table. 
-    
-    Arguments:
-        connection (obj): Database connection object returned by psycopg2.connect
-        data (dict): Key-value object with desired metrics 
-    """
-    with connection:
-        with connection.cursor() as curs:
-            curs.execute(
-                """
-                INSERT INTO website_metrics (url, response_time, status_code, regex_found)
-                VALUES (%s, %s, %s, %s);
-                """,
-                (data.get('url'), data.get('response_time'), data.get('status_code'), data.get('regex_found'))
-            )
-    return
-
+from utils.postgres import init_postgres, create_metrics_table, insert_data
+from utils.kafka import init_consumer
 
 if __name__ == '__main__':
     # Create Kafka consumer and Postgres connection

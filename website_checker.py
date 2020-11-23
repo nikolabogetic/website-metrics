@@ -2,12 +2,13 @@ import requests
 import json
 import re
 import argparse
-from config import kafka_conf
+import logging
 from kafka import errors
 from kafka.admin import NewTopic
 
-from utils import RepeatedTimer
-from kafka_utils import init_admin, init_producer
+from config import kafka_conf
+from utils.timer import RepeatedTimer
+from utils.kafka import init_admin, init_producer
 
 def collect_metrics(website, pattern=None, publish=True, topic=None):
     """Retrieve metrics (status code, response time) from a given website. 
@@ -34,9 +35,9 @@ def collect_metrics(website, pattern=None, publish=True, topic=None):
         'response_time': r.elapsed.total_seconds(),
         'regex_found': match
     }
-    print(data)
+    logging.debug(data)
 
-    if publish:
+    if publish and topic:
         producer.send(topic, value=data)
     return data
 

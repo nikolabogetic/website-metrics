@@ -1,5 +1,4 @@
-from database_writer import create_metrics_table, insert_data
-from utils import init_postgres
+from utils.postgres import init_postgres, create_metrics_table, insert_data
 from config import postgres_conf
 
 

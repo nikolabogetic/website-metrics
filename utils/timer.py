@@ -1,4 +1,3 @@
-import psycopg2
 from threading import Timer
 
 class RepeatedTimer(object):
@@ -27,22 +26,3 @@ class RepeatedTimer(object):
     def stop(self):
         self._timer.cancel()
         self.is_running = False 
-
-
-def init_postgres(config):
-    """Initialize Postgres connection with parameters from the config object.
-
-    Arguments:
-        config (obj): Config object from the Postgres section of the config.ini file
-    Returns:
-        conn (obj): Postgres connection object
-    """
-    conn = psycopg2.connect(
-        user = config['user'],
-        password = config['password'],
-        host = config['host'],
-        port = config['port'],
-        database = config['database']
-    )
-    conn.autocommit = True
-    return conn

@@ -4,6 +4,7 @@ config/certs/*.key
 config/certs/*.pem
 config/certs/*.cert
 .DS_Store
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

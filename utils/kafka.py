@@ -1,7 +1,5 @@
 import json
-
 from kafka import KafkaProducer, KafkaConsumer, KafkaAdminClient
-from configparser import ConfigParser
 
 certpath = 'config/certs/'
 
