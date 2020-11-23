@@ -1,6 +1,7 @@
 import json
 import argparse
 import logging
+import sys
 from kafka import errors
 from kafka.admin import NewTopic
 
@@ -11,9 +12,15 @@ from utils.kafka import init_admin, init_producer
 
 
 def collect_and_publish(website, topic, pattern=None):
-    data = collect_metrics(website, pattern)
+    try:
+        data = collect_metrics(website, pattern)
+    except ValueError as e:
+        logger.error('Invalid value provided.')
+        logger.error(e)
+        sys.exit(1)
     logger.info(data)
     producer.send(topic, value=data)
+    return
 
 
 if __name__ == '__main__':
@@ -31,9 +38,17 @@ if __name__ == '__main__':
     parser.add_argument('--pattern', help='Regex pattern to look for', required=False)
     args = parser.parse_args()
 
+    logger.info('Website checker started')
+
     # Create Kafka admin and producer, get topic name from config
-    admin_client = init_admin(kafka_conf)
-    producer = init_producer(kafka_conf)
+    try:
+        admin_client = init_admin(kafka_conf)
+        producer = init_producer(kafka_conf)
+    except errors.KafkaError as e:
+        logger.error(e)
+        logger.error('Check Kafka service and try again.')
+        sys.exit(1)
+
     topic = kafka_conf['topic']
 
     # Create new topic
@@ -46,4 +61,11 @@ if __name__ == '__main__':
         logger.info('Topic already exists, skipping')
     # Start periodic collection of metrics
     rt = RepeatedTimer(int(args.time), collect_and_publish, args.url, topic, pattern=args.pattern)
-    rt.start()
+    try:
+        rt.start()
+        while True:
+            pass
+    except KeyboardInterrupt:
+        logger.error('Keyboard interrupt - closing connection')
+        rt.stop()
+

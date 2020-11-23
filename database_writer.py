@@ -1,6 +1,8 @@
 import psycopg2
 import json
 import logging
+import sys
+from kafka import errors
 
 from config import kafka_conf, postgres_conf
 from utils.postgres import init_postgres, create_metrics_table, insert_data
@@ -15,25 +17,29 @@ if __name__ == '__main__':
     ch.setLevel(logging.INFO)
     logger.addHandler(ch)
 
-    # Create Kafka consumer and Postgres connection
-    consumer = init_consumer(kafka_conf)
-    conn = init_postgres(postgres_conf)
+    logger.info('Database writer started')
 
     try:
+        # Create Kafka consumer and Postgres connection
+        consumer = init_consumer(kafka_conf)
+        conn = init_postgres(postgres_conf)
+
         create_metrics_table(conn)
         # Loop trhough Kafka messages
         for msg in consumer:
             record = json.loads(msg.value)
-            logger.debug('Received: {}'.format(record.get('status_code')))
+            logger.info('Received: {}'.format(record.get('status_code')))
             insert_data(conn, record)
+
     except psycopg2.Error as e:
         logger.error('Postgres error:')
         logger.error(e)
+    except errors.KafkaError as e:
+        logger.error('Kafka error:')
+        logger.error(e)
     except KeyboardInterrupt:
         logger.error('Keyboard interrupt - closing connection')
-    except e:
-        logger.error('Unhandled exception:')
-        logger.error(e)
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
