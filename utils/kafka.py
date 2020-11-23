@@ -2,9 +2,7 @@ import json
 import os
 from kafka import KafkaProducer, KafkaConsumer, KafkaAdminClient
 
-from config import basedir
-
-certpath = os.path.join(basedir, 'certs/')
+from config import certpath
 
 
 def init_admin(conf):

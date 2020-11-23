@@ -1,10 +1,19 @@
 import json
+import os
 from kafka.admin import NewTopic
 from kafka import errors
-from config import conf
+from config import Config, certpath
 from utils.kafka import init_admin, init_producer, init_consumer
 
 def test_send_receive_message():
+    # For GitHub Actions. Certs are stored in GitHub secrets. This writes them to files.
+    if os.getenv('KAFKA_CERT'):
+        with open(certpath+'service.cert', 'w') as f:
+            f.write(os.getenv('KAFKA_CERT'))
+        with open(certpath+'service.key', 'w') as f:
+            f.write(os.getenv('KAFKA_KEY'))
+        with open(certpath+'ca.pem', 'w') as f:
+            f.write(os.getenv('KAFKA_CA'))
 
     data = [
         {
@@ -29,7 +38,7 @@ def test_send_receive_message():
 
     # Init admin, producer, consumer
     topic = 'pytest'
-    test_conf = conf
+    test_conf = Config()
     test_conf.kafka_topic = topic
     admin_client = init_admin(test_conf)
     producer = init_producer(test_conf)

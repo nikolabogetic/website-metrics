@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
+certpath = os.path.join(basedir, 'certs/')
 
 class Config(object):
     def __init__(self):
