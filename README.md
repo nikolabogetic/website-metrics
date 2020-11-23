@@ -48,6 +48,5 @@ $ python3 database_writer.py
 For tests, it is assumed that Kafka certificates, as well as Kafka and Postgres connection parameters, are configured using `init_config.py`.
 
 ```
-$ pip install pytest
-$ pytest
+$ pytest -v --cov
 ```
