@@ -40,6 +40,10 @@ if __name__ == '__main__':
         logger.error('Kafka error:')
         logger.error(e)
         sys.exit(1)
+    except FileNotFoundError as e:
+        logger.error(e)
+        logger.error('Check that Kafka certificate files are in ./cert/')
+        sys.exit(1)
 
     # Create new topic
     topic_list = []

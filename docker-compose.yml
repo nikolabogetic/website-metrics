@@ -20,6 +20,8 @@ services:
 
   website_checker:
     build: .
+    volumes:
+      - ./certs:/usr/src/app/certs
     environment:
       - KAFKA_URI=${KAFKA_URI}
       - KAFKA_TOPIC=${KAFKA_TOPIC}

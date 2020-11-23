@@ -37,6 +37,10 @@ if __name__ == '__main__':
     except errors.KafkaError as e:
         logger.error('Kafka error:')
         logger.error(e)
+    except FileNotFoundError as e:
+        logger.error(e)
+        logger.error('Check that Kafka certificate files are in ./cert/')
+        sys.exit(1)
     except KeyboardInterrupt:
         logger.error('Keyboard interrupt - closing connection')
         conn.close()
