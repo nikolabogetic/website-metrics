@@ -10,6 +10,8 @@ from config import kafka_conf
 from utils.timer import RepeatedTimer
 from utils.kafka import init_admin, init_producer
 
+logger = logging.getLogger(__name__)
+
 def collect_metrics(website, pattern=None, publish=True, topic=None):
     """Retrieve metrics (status code, response time) from a given website. 
     Optionally, search for a regex pattern. Then publish to a Kafka topic.
@@ -35,7 +37,7 @@ def collect_metrics(website, pattern=None, publish=True, topic=None):
         'response_time': r.elapsed.total_seconds(),
         'regex_found': match
     }
-    logging.debug(data)
+    logger.debug(data)
 
     if publish and topic:
         producer.send(topic, value=data)
@@ -58,10 +60,10 @@ if __name__ == '__main__':
     topic_list = []
     topic_list.append(NewTopic(name=topic, num_partitions=1, replication_factor=3))
     try:
-        print('Creating topic')
+        logger.info('Creating topic')
         admin_client.create_topics(new_topics=topic_list, validate_only=False)
     except errors.TopicAlreadyExistsError:
-        print('Topic already exists, skipping')
+        logger.info('Topic already exists, skipping')
     # Start periodic collection of metrics
     rt = RepeatedTimer(int(args.time), collect_metrics, args.url, pattern=args.pattern, topic=topic)
     rt.start()

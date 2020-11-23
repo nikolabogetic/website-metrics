@@ -1,7 +1,10 @@
 import json
+import os
 from kafka import KafkaProducer, KafkaConsumer, KafkaAdminClient
 
-certpath = 'config/certs/'
+from config import app_root
+
+certpath = os.path.join(app_root, 'config/certs/')
 
 
 def init_admin(config):
@@ -29,7 +32,7 @@ def init_producer(config):
     Arguments:
         config (obj): Config object from the Kafka section of the config.ini file
     Returns:
-        admin_client (obj): Kafka Producer object
+        producer (obj): Kafka Producer object
     """
     producer = KafkaProducer(
         bootstrap_servers=config['servers'],
@@ -48,7 +51,7 @@ def init_consumer(config):
     Arguments:
         config (obj): Config object from the Kafka section of the config.ini file
     Returns:
-        admin_client (obj): Kafka Consumer object
+        consumer (obj): Kafka Consumer object
     """
     consumer = KafkaConsumer(
         config['topic'],
