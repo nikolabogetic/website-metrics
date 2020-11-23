@@ -5,7 +5,7 @@ import sys
 from kafka import errors
 from kafka.admin import NewTopic
 
-from config import kafka_conf
+from config import conf
 from utils.web import collect_metrics
 from utils.timer import RepeatedTimer
 from utils.kafka import init_admin, init_producer
@@ -42,14 +42,14 @@ if __name__ == '__main__':
 
     # Create Kafka admin and producer, get topic name from config
     try:
-        admin_client = init_admin(kafka_conf)
-        producer = init_producer(kafka_conf)
+        admin_client = init_admin(conf)
+        producer = init_producer(conf)
     except errors.KafkaError as e:
         logger.error('Kafka error:')
         logger.error(e)
         sys.exit(1)
 
-    topic = kafka_conf['topic']
+    topic = conf.kafka_topic
 
     # Create new topic
     topic_list = []

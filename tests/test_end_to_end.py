@@ -1,10 +1,11 @@
 import json
 from kafka.admin import NewTopic
 from kafka import errors
-from config import kafka_conf, postgres_conf
+from config import conf
 from utils.kafka import init_admin, init_producer, init_consumer
 
 def test_send_receive_message():
+
     data = [
         {
             'url': 'https://www.wikipedia.org/',
@@ -28,10 +29,11 @@ def test_send_receive_message():
 
     # Init admin, producer, consumer
     topic = 'pytest'
-    kafka_conf['topic'] = topic
-    admin_client = init_admin(kafka_conf)
-    producer = init_producer(kafka_conf)
-    consumer = init_consumer(kafka_conf)
+    test_conf = conf
+    test_conf.kafka_topic = topic
+    admin_client = init_admin(test_conf)
+    producer = init_producer(test_conf)
+    consumer = init_consumer(test_conf)
 
     # Create topic
     topic_list = []

@@ -1,10 +1,7 @@
 import os
-from configparser import ConfigParser
 
-app_root = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(app_root, 'config/config.ini')
-
-config = ConfigParser()
+basedir = os.path.dirname(os.path.abspath(__file__))
+dotenv_path = os.path.join(basedir, '.env')
 
 print(
     "Hello! I am your interactive guide to setting up the website-metrics application.\n" +
@@ -19,20 +16,18 @@ database = input("Postgres database: ")
 
 print("\nGreat! Now, on to Kafka:\n")
 
-servers = input("Kafka server(s) with port(s): ")
+uri = input("Kafka URI (server:port): ")
 topic = input("Kafka topic (e.g. website-metrics): ")
 
-config['POSTGRES'] = {'user': username,
-                    'password': password,
-                    'host': host,
-                    'port': port,
-                    'database': database}
-
-config['KAFKA'] = {'servers': servers,
-                    'topic': topic}
-
-with open(config_path, 'w') as configfile:
-    config.write(configfile)
+with open(dotenv_path, 'w') as f:
+    f.write('POSTGRES_USER=' + username + '\n')
+    f.write('POSTGRES_PASSWORD=' + password + '\n')
+    f.write('POSTGRES_HOST=' + host + '\n')
+    f.write('POSTGRES_PORT=' + port + '\n')
+    f.write('POSTGRES_DB=' + database + '\n')
+    f.write('\n')
+    f.write('KAFKA_URI=' + uri + '\n')
+    f.write('KAFKA_TOPIC=' + topic + '\n')
 
 print(
     "\nExcellent! Finally, please download your Kafka certificate files \n" +

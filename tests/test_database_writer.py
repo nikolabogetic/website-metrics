@@ -1,9 +1,9 @@
 from utils.postgres import init_postgres, create_metrics_table, insert_data
-from config import postgres_conf
+from config import conf
 
 
 def test_database_writer():
-    conn = init_postgres(postgres_conf)
+    conn = init_postgres(conf)
     data = {
         'url': 'https://www.wikipedia.org/',
         'response_time': 0.10382,

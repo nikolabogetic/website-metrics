@@ -4,7 +4,7 @@ import logging
 import sys
 from kafka import errors
 
-from config import kafka_conf, postgres_conf
+from config import conf
 from utils.postgres import init_postgres, create_metrics_table, insert_data
 from utils.kafka import init_consumer
 
@@ -21,8 +21,8 @@ if __name__ == '__main__':
 
     try:
         # Create Kafka consumer and Postgres connection
-        consumer = init_consumer(kafka_conf)
-        conn = init_postgres(postgres_conf)
+        consumer = init_consumer(conf)
+        conn = init_postgres(conf)
 
         create_metrics_table(conn)
         # Loop trhough Kafka messages

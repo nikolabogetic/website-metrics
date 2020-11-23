@@ -1,20 +1,20 @@
 import psycopg2
 
 
-def init_postgres(config):
+def init_postgres(conf):
     """Initialize Postgres connection with parameters from the config object.
 
     Arguments:
-        config (obj): Config object from the Postgres section of the config.ini file
+        conf (obj): Config object with loaded environment variables
     Returns:
         conn (obj): Postgres connection object
     """
     conn = psycopg2.connect(
-        user = config['user'],
-        password = config['password'],
-        host = config['host'],
-        port = config['port'],
-        database = config['database']
+        user = conf.pg_user,
+        password = conf.pg_pass,
+        host = conf.pg_host,
+        port = conf.pg_port,
+        database = conf.pg_db
     )
     conn.autocommit = True
     return conn

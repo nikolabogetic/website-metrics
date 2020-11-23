@@ -1,8 +1,7 @@
 # Custom
-config/config.ini
-config/certs/*.key
-config/certs/*.pem
-config/certs/*.cert
+*.key
+*.pem
+*.cert
 .DS_Store
 .vscode/
 

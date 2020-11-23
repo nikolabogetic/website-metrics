@@ -1,10 +1,18 @@
 import os
-from configparser import ConfigParser
+from dotenv import load_dotenv
 
-app_root = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(app_root, 'config/config.ini')
+basedir = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
-config_object = ConfigParser()
-config_object.read(config_path)
-kafka_conf = config_object['KAFKA']
-postgres_conf = config_object['POSTGRES']
+class Config(object):
+    def __init__(self):
+        self.pg_user = os.getenv('POSTGRES_USER')
+        self.pg_pass = os.getenv('POSTGRES_PASSWORD')
+        self.pg_host = os.getenv('POSTGRES_HOST')
+        self.pg_port = os.getenv('POSTGRES_PORT')
+        self.pg_db = os.getenv('POSTGRES_DB')
+
+        self.kafka_uri = os.getenv('KAFKA_URI')
+        self.kafka_topic = os.getenv('KAFKA_TOPIC') or 'website-metrics'
+
+conf = Config()
