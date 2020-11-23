@@ -45,8 +45,8 @@ if __name__ == '__main__':
         admin_client = init_admin(kafka_conf)
         producer = init_producer(kafka_conf)
     except errors.KafkaError as e:
+        logger.error('Kafka error:')
         logger.error(e)
-        logger.error('Check Kafka service and try again.')
         sys.exit(1)
 
     topic = kafka_conf['topic']

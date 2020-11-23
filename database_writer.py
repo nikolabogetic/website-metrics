@@ -39,7 +39,4 @@ if __name__ == '__main__':
         logger.error(e)
     except KeyboardInterrupt:
         logger.error('Keyboard interrupt - closing connection')
-    finally:
-        if conn:
-            conn.close()
-
+        conn.close()
