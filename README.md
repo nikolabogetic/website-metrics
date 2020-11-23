@@ -10,7 +10,7 @@ Requires Python 3.6 or newer.
 
 ## Setup
 
-Initial setup:
+### Initial setup:
 ```
 $ python3 init_config.py
 ```
@@ -46,3 +46,17 @@ You can always set the parameters directly in `docker-compose.yml` if you prefer
 ```
 $ WEBSITE_URL=https://wikipedia.org/ REGEX_PATTERN="English" docker-compose up
 ```
+
+
+## Testing
+
+### Running pytest manually in virtual environment:
+For tests, it is assumed that connetion parameters and Kafka certificate files are configured (either using `init_config.py`, or manually).
+
+```
+$ python3 -m venv venv
+$ . venv/bin/activate
+$ pip install -r requirements.txt
+$ pytest -v --cov
+```
+
