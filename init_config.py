@@ -1,4 +1,9 @@
+import os
 from configparser import ConfigParser
+
+app_root = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(app_root, 'config/config.ini')
+
 config = ConfigParser()
 
 print(
@@ -26,7 +31,7 @@ config['POSTGRES'] = {'user': username,
 config['KAFKA'] = {'servers': servers,
                     'topic': topic}
 
-with open('config/config.ini', 'w') as configfile:
+with open(config_path, 'w') as configfile:
     config.write(configfile)
 
 print(
