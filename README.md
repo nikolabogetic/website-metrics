@@ -49,8 +49,12 @@ You can always set the parameters directly in `docker-compose.yml` if you prefer
 $ WEBSITE_URL=https://wikipedia.org/ REGEX_PATTERN="English" docker-compose up
 ```
 
+Check out the [project wiki](https://github.com/nikolabogetic/website-metrics/wiki) for more details.
+
 
 ## Testing
+
+GitHub Actions workflow is used to build and test the application automatically.
 
 ### Running pytest manually in virtual environment:
 For tests, it is assumed that connetion parameters and Kafka certificate files are configured (either using `init_config.py`, or manually).
