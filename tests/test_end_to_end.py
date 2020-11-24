@@ -6,6 +6,10 @@ from config import Config, certpath
 from utils.kafka import init_admin, init_producer, init_consumer
 
 def test_send_receive_message():
+    """Send some messages to Kafka using Producer. 
+    Receive messages using Consumer. 
+    Check that input matches the output."""
+    
     # For GitHub Actions. Certs are stored in GitHub secrets. This writes them to files.
     if os.getenv('KAFKA_CERT'):
         with open(certpath+'service.cert', 'w') as f:

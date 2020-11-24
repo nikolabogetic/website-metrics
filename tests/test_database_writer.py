@@ -3,6 +3,9 @@ from config import conf
 
 
 def test_database_writer():
+    """Write some data to Postgres, then query Postgres. 
+    Check that input matches the output."""
+    
     conn = init_postgres(conf)
     data = {
         'url': 'https://www.wikipedia.org/',
