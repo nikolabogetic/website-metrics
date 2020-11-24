@@ -57,7 +57,7 @@ Check out the [project wiki](https://github.com/nikolabogetic/website-metrics/wi
 GitHub Actions workflow is used to build and test the application automatically.
 
 ### Running pytest manually in virtual environment:
-For tests, it is assumed that connetion parameters and Kafka certificate files are configured (either using `init_config.py`, or manually).
+For tests, it is assumed that connection parameters and Kafka certificate files are configured (either using `init_config.py`, or manually).
 
 ```
 $ python3 -m venv venv
