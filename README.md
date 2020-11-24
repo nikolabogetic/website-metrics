@@ -12,7 +12,7 @@ Requires Python 3.6 or newer.
 
 ## Setup
 
-### Initial setup:
+### Initial setup
 ```
 $ python3 init_config.py
 ```
@@ -36,7 +36,23 @@ REGEX_PATTERN="Domain"
 
 ## Usage
 
-### Running with Docker:
+### Option 1: Running manually in a local virtual environment
+Once `.env` is configured and the certificate files are in place, run the following commands to set up the virtual environment:
+```
+$ python3 -m venv venv
+$ . venv/bin/activate
+$ pip install -r requirements.txt
+```
+To start the database writer:
+```
+$ python database_writer.py
+```
+To start the website checker:
+```
+$ python website_checker.py
+```
+
+### Option 2: Running with Docker
 Once `.env` is configured and the certificate files are in place, you can run the whole package with docker-compose:
 ```
 $ docker-compose build
@@ -49,14 +65,11 @@ You can always set the parameters directly in `docker-compose.yml` if you prefer
 $ WEBSITE_URL=https://wikipedia.org/ REGEX_PATTERN="English" docker-compose up
 ```
 
-Check out the [project wiki](https://github.com/nikolabogetic/website-metrics/wiki) for more details.
-
-
 ## Testing
 
 GitHub Actions workflow is used to build and test the application automatically.
 
-### Running pytest manually in virtual environment:
+### Running pytest manually in virtual environment
 For tests, it is assumed that connection parameters and Kafka certificate files are configured (either using `init_config.py`, or manually).
 
 ```
